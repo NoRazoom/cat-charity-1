@@ -7,7 +7,7 @@ from pydantic import ConfigDict, NonNegativeInt, Field, BaseModel
 class CharityProjectBase(BaseModel):
     name: Optional[str] = Field(None, min_length=5, max_length=100)
     description: Optional[str] = Field(None, min_length=10)
-    full_amount: Optional[NonNegativeInt]
+    full_amount: Optional[NonNegativeInt] = None
 
 
 class CharityProjectCreate(CharityProjectBase):
@@ -18,7 +18,7 @@ class CharityProjectCreate(CharityProjectBase):
 
 
 class CharityProjectUpdate(CharityProjectBase):
-    pass
+    model_config = ConfigDict(extra='forbid')
 
 
 class CharityProjectDB(CharityProjectBase):
@@ -27,4 +27,6 @@ class CharityProjectDB(CharityProjectBase):
     fully_invested: bool
     create_date: datetime
     close_date: Optional[datetime] = None
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(
+        from_attributes=True,
+    )

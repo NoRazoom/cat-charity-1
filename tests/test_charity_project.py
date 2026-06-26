@@ -351,6 +351,8 @@ def test_update_charity_project(
         PROJECT_DETAILS_URL.format(project_id=charity_project.id),
         json=json_data
     )
+    print(f"Status: {response.status_code}")
+    print(f"Response: {response.json()}")
     assert response.status_code == 200, (
         f'Корректный PATCH-запрос к эндпоинту `{PROJECT_DETAILS_URL}` должен '
         'вернуть ответ со статус-кодом 200.'

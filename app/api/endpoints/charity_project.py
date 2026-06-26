@@ -80,9 +80,9 @@ async def update_project(
     нельзя установить требуемую сумму меньше уже вложенной.
     """
     project = await check_project_exists(project_id, session)
-    await check_project_closed(project_id, session)
     if obj_in.name is not None:
         await check_unique_name(obj_in.name, session)
+    await check_project_closed(project_id, session)
     await check_edit_sum(project_id, obj_in, session)
 
     project = await charity_project_crud.update(project, obj_in, session)

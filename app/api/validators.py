@@ -65,7 +65,7 @@ async def check_edit_sum(
         session: AsyncSession
 ):
     project_old = await charity_project_crud.get(project_id, session)
-    if project.full_amount:
+    if project.full_amount is not None:
         if project.full_amount < project_old.invested_amount:
             raise HTTPException(
                 status_code=400,
