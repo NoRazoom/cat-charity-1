@@ -1,4 +1,5 @@
 from typing import Annotated
+from datetime import datetime
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -83,7 +84,14 @@ async def update_project(
     if obj_in.name is not None:
         await check_unique_name(obj_in.name, session)
     await check_project_closed(project_id, session)
-    await check_edit_sum(project_id, obj_in, session)
+    project = await check_edit_sum(project_id, obj_in, session)
+    if (obj_in.full_amount is not None and
+            project.invested_amount == obj_in.full_amount):
+        project.fully_invested = True
+        project.close_date = datetime.now()
+        session.add(project)
+        await session.commit()
+        await session.refresh(project)
 
     project = await charity_project_crud.update(project, obj_in, session)
     return project

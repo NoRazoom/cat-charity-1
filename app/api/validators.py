@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -72,9 +70,4 @@ async def check_edit_sum(
                 detail='Нелья установить значение'
                 ' full_amount меньше уже вложенной суммы',
             )
-        elif project.full_amount == project_old.invested_amount:
-            project_old.fully_invested = True
-            project_old.close_date = datetime.now()
-            session.add(project_old)
-            await session.commit()
-            await session.refresh(project_old)
+    return project_old
