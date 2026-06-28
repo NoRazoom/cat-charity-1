@@ -20,8 +20,7 @@ SessionDep = Annotated[AsyncSession, Depends(get_async_session)]
 )
 async def get_all_donations(session: SessionDep):
     """Показать список всех пожертвований."""
-    donations = await donation_crud.get_multi(session)
-    return donations
+    return await donation_crud.get_multi(session)
 
 
 @router.post(
@@ -35,5 +34,4 @@ async def create_donation(
 ):
     """Создать пожертвование."""
     donation = await donation_crud.create(donation, session)
-    donation = await donation_crud.investition(donation.id, session)
-    return donation
+    return await donation_crud.investition(donation.id, session)

@@ -25,8 +25,7 @@ SessionDep = Annotated[AsyncSession, Depends(get_async_session)]
 )
 async def get_all_projects(session: SessionDep):
     """Показать список всех целевых проектов."""
-    projects = await charity_project_crud.get_multi(session)
-    return projects
+    return await charity_project_crud.get_multi(session)
 
 
 @router.post(
@@ -41,8 +40,7 @@ async def create_new_project(
     """Создать целевой проект."""
     await check_unique_name(project.name, session)
     project = await charity_project_crud.create(project, session)
-    project = await charity_project_crud.investition(project.id, session)
-    return project
+    return await charity_project_crud.investition(project.id, session)
 
 
 @router.delete(
@@ -60,8 +58,7 @@ async def remove_project(
     """
     project = await check_project_exists(project_id, session)
     project = await check_project_before_delete(project_id, session)
-    project = await charity_project_crud.remove(project, session)
-    return project
+    return await charity_project_crud.remove(project, session)
 
 
 @router.patch(
@@ -89,5 +86,4 @@ async def update_project(
             project, obj_in, session
         )
 
-    project = await charity_project_crud.update(project, obj_in, session)
-    return project
+    return await charity_project_crud.update(project, obj_in, session)
