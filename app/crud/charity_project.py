@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.crud.base import CRUDBase
 from app.models import CharityProject, Donation
+from app.schemas.charity_project import CharityProjectUpdate
 
 
 class CRUDCharity(CRUDBase):
@@ -52,6 +53,20 @@ class CRUDCharity(CRUDBase):
         await session.commit()
         await session.refresh(project)
 
+        return project
+
+    async def close_or_not_project(
+            self,
+            project: CharityProject,
+            project_in: CharityProjectUpdate,
+            session: AsyncSession
+    ):
+        if project.invested_amount == project_in.full_amount:
+            project.fully_invested = True
+            project.close_date = datetime.now()
+            session.add(project)
+            await session.commit()
+            await session.refresh(project)
         return project
 
 
